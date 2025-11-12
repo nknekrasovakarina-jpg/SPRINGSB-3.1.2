@@ -24,6 +24,7 @@ public class AdminController {
         this.userService = userService;
     }
 
+
     @GetMapping
     public String adminPage(Model model,
                             @RequestParam(value = "success", required = false) String success,

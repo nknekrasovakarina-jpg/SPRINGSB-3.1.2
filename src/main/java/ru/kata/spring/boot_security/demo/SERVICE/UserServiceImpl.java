@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@Transactional(readOnly = true)
-public class UserServiceImpl implements IUserService {
+@Transactional(readOnly = true) // По умолчанию все методы readOnly = true
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll(); // readOnly = true по классу
     }
 
     @Override
@@ -52,8 +52,9 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findByEmail(email);
     }
 
+    // ------------------------- Методы записи -------------------------
     @Override
-    @Transactional
+    @Transactional // переопределяет readOnly = true с класса, теперь readOnly = false
     public User saveUser(User user) {
         if (user.getId() == null || !user.getPassword().startsWith("$2a$")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -97,7 +98,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+        return roleRepository.findAll(); // readOnly = true по классу
     }
 
     @Override
@@ -120,5 +121,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return null;
     }
 }
