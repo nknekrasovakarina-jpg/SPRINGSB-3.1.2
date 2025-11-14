@@ -83,10 +83,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
-        return null;
+        return userRepository.findByUsernameWithRoles(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
-
 
     // ---------------------- WRITE METHODS ----------------------
 
